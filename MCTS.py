@@ -40,6 +40,8 @@ class MCTS:
                 new_state.make_move(move)
                 child_node = Node(move=move, parent=node, state=new_state)
                 node.add_child(child_node)
+
+
                 #break ### Dodamo samo enega otroka
 
         # for move in game.get_legal_moves():
@@ -54,20 +56,26 @@ class MCTS:
             move = random.choice(game.get_legal_moves())
             game.make_move(move)
         if game.is_winner(1):
-            return 1
-        elif game.is_winner(2):
             return -1
+        elif game.is_winner(2):
+            return 1
         else:
             return 0
+
+    # def backpropagate(self, node, result):
+    #     while node is not None:
+    #         node.update(result)
+    #         #result = -result
+    #         node = node.parent
+
 
     def backpropagate(self, node, result):
         while node is not None:
             node.update(result)
-            result = -result
             node = node.parent
 
     def best_move(self, root, game):
-        for _ in range(2000):  # Nastavimo število iteracij
+        for _ in range(200):  # Nastavimo število iteracij
             node = root
             game_copy = TicTacToe()
             game_copy.board = game.board[:]
