@@ -5,7 +5,7 @@ import random
 
 class MCTS:
 
-    def __init__(self, exploration_weight=1):
+    def __init__(self, exploration_weight=1.4):
         # Nastavimo težo za exploracijo, 0=ni exploracije, le exploitacija
         self.exploration_weight = exploration_weight
 
@@ -28,7 +28,6 @@ class MCTS:
             if score > best_score:
                 best_score = score
                 best_child = child
-
         return best_child
 
     def expand(self, node, game):
@@ -47,6 +46,7 @@ class MCTS:
                 child_node = Node(move=move, parent=node, state=new_state)
                 node.add_child(child_node)
 
+    #Simuliramo igro dokler ni končana ter vrnemo rezultat (nagrado)
     def simulate(self, game):
         while not game.game_over():
             move = random.choice(game.get_legal_moves())
@@ -58,26 +58,24 @@ class MCTS:
         else:
             return 0
 
-    # def backpropagate(self, node, result):
-    #     while node is not None:
-    #         node.update(result)
-    #         #result = -result
-    #         node = node.parent
 
-
+    #Posodabljamo vozlišča, dokler ne pridemo do korena
     def backpropagate(self, node, result):
         while node is not None:
             node.update(result)
             node = node.parent
 
     def best_move(self, root, game):
-        for _ in range(2000):  # Nastavimo število iteracij
+        for _ in range(500):  # Nastavimo število iteracij
             node = root
             game_copy = TicTacToe()
+            # Kopiramo trenutno stanje igre
             game_copy.board = game.board[:]
+
             game_copy.current_player = game.current_player
 
-            # Selekcija
+            #Se preskoči, če root nima otrok - gre direktno v razširitev
+            # Selekcija - izbiramo dokler ne pridemo do končnega stanja igre
             while node.children and not game_copy.game_over():
                 node = self.select(node)
                 game_copy.make_move(node.move)
@@ -95,6 +93,7 @@ class MCTS:
             # Vzratna-posodobitev
             self.backpropagate(node, result)
 
+        #Izberemo najboljšega otroka - neke implementacije so vzele UCT nekatere pa najbolj obiskanega otroka
         best_child = max(root.children, key=lambda c: c.visits)
         return best_child.move
 

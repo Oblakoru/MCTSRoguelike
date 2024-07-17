@@ -70,7 +70,7 @@ def plot_results(results):
     plt.bar(labels, counts)
     plt.xlabel('Rezultat')
     plt.ylabel('Število zmag')
-    plt.title('Rezultati iger: Random AI vs MCTS AI (100 iteracij)')
+    plt.title('Rezultati iger: Random AI vs MCTS AI (50 iteracij)')
     plt.show()
 
 
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     if opponent == 2:
         num_games = 50
         results = simulate_games(num_games, opponent)
-        print(f"Results after {num_games} games: {results}")
+        print(f"Rezultati po {num_games} igrah: {results}")
         plot_results(results)
     else:
         play_game(opponent)
