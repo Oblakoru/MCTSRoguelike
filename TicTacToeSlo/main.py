@@ -5,7 +5,7 @@ from Node import Node
 from TicTacToe import TicTacToe
 
 
-def play_game(opponent, exploration_weight=1.4):
+def igrajIgro(opponent, exploration_weight=1.4):
 
     #Ustvarimo novo instanco igre
     game = TicTacToe()
@@ -99,11 +99,12 @@ def play_game(opponent, exploration_weight=1.4):
 
 
 
+# simuliranje iger za prikaz rezultatov
 def simulate_games(num_games, opponent):
     results = {"X": 0, "O": 0, "D": 0}
 
     for _ in range(num_games):
-        result = play_game(opponent)
+        result = igrajIgro(opponent)
         results[result] += 1
 
     return results
@@ -113,17 +114,17 @@ def plot_results(results):
     counts = results.values()
 
     plt.bar(labels, counts)
-    plt.xlabel('Result')
-    plt.ylabel('Count')
-    plt.title('Results of 1000 Tic-Tac-Toe Games: Random AI vs MCTS AI')
+    plt.xlabel('Rezultat')
+    plt.ylabel('Število zmag')
+    plt.title('Rezultati iger: Random AI vs MCTS AI (100 iteracij)')
     plt.show()
 
 
 if __name__ == "__main__":
-    print("Choose your opponent:")
-    print("1: Human")
-    print("2: Random AI")
-    opponent = int(input("Enter 1 or 2: "))
+    print("Izberi način igranja:")
+    print("1: Človek")
+    print("2: Nakjlučni AI")
+    opponent = int(input("Vnesi 1 ali 2: "))
 
     if opponent == 2:
         num_games = 100
@@ -131,5 +132,5 @@ if __name__ == "__main__":
         print(f"Results after {num_games} games: {results}")
         plot_results(results)
     else:
-        play_game(opponent)
+        igrajIgro(opponent)
 

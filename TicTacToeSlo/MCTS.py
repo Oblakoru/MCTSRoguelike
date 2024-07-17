@@ -10,13 +10,18 @@ class MCTS:
         self.exploration_weight = exploration_weight
 
     def select(self, node):
+        #Nastavimo najboljšega otroka na None in najboljši rezultat na -inf
         best_score = -float('inf')
         best_child = None
+
+        #Gremo skozi vse otroke in izračunamo UCT vrednost
         for child in node.children:
+            #Če otrok še ni bil obiskan, nastavimo rezultat na neskončno, da ga bomo izbrali
             if child.visits == 0:
                 score = float('inf')
             else:
-                # UCT formula
+                # UCT formula za izračun vrednosti
+                #Wins - vrednost zmag otroka (zmage, porazi in neodločeno)
                 exploit = child.wins / child.visits
                 explore = math.sqrt(math.log(node.visits) / child.visits)
                 score = exploit + self.exploration_weight * explore
