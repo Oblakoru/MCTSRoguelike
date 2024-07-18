@@ -1,5 +1,5 @@
 import math
-from random import random
+import random
 
 from TurnBasedRogueLike.Node import Node
 
@@ -63,9 +63,11 @@ class MCTS:
                 self.expand(node, game_copy)
 
             if node.children:
-                node = max(node.children, key=lambda c: c.visits)
+                #node = max(node.children, key=lambda c: c.visits)
+                node = random.choice(node.children)
                 game_copy.apply_move(node.move)
             result = self.simulate(game_copy)
+
             self.backpropagate(node, result)
 
         best_child = max(root.children, key=lambda c: c.visits)

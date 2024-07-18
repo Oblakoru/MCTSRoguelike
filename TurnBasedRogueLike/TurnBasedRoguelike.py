@@ -1,16 +1,16 @@
+
 import random
-import math
 import matplotlib.pyplot as plt
 from TurnBasedRogueLike.Character import Character
 from TurnBasedRogueLike.GameState import GameState
 from TurnBasedRogueLike.MCTS import MCTS
 from TurnBasedRogueLike.Node import Node
 
-
 #Funkcija, ki izbere naključno potezo za Random AI iz legalnih potez
 def random_turn(player, enemy):
     moves = player.get_available_moves()
     move = random.choice(moves)
+
     if move == 'attack':
         player.attack(enemy)
     elif move == 'super_attack':
@@ -31,10 +31,11 @@ def mcts_turn(player, enemy, mcts, current_turn):
 
 #Funkcija, ki omogoča igralcu, da izbere svojo potezo
 def player_turn(player, enemy):
-    print(f"{player.name}'s turn!")
-    print(f"{player.name} - Health: {player.health}, Mana: {player.mana}")
-    print(f"{enemy.name} - Health: {enemy.health}, Mana: {enemy.mana}")
-    move = input("Choose your move: attack(1), super_attack(2), heal(3), guard(4): ").strip()
+    print("--------------------------------------")
+    print(f"{player.name} je na vrsti!")
+    print(f"{player.name} - Zdravje: {player.health}, Mana: {player.mana}")
+    print(f"{enemy.name} - Zdravje: {enemy.health}, Mana: {enemy.mana}")
+    move = input("Izberi svojo potezo: napad(1), super napad(2), zdravljenje(3), obramba(4): ").strip()
     if move == '1':
         player.attack(enemy)
     elif move == '2':
@@ -44,8 +45,10 @@ def player_turn(player, enemy):
     elif move == '4':
         player.guard()
     else:
-        print("Invalid move! Try again.")
+        print("Napačna poteza, izberi ponovno.")
         player_turn(player, enemy)
+
+    print("--------------------------------------")
 
 
 #Igralna funkcija
@@ -71,7 +74,7 @@ def game_turn(player, enemy, player_type):
 
 
 
-#Funkcija, ki zažene simulacije 100 iger proti Random AI agentu in MCTS agentu
+#Funkcija, ki zažene simulacije 100 iger proti Random AI agentu in MCTS agentu - za prikaz rezultatov na grafu
 def run_simulations(num_games):
     results = {'Igralec/Random AI': 0, 'MCTS': 0}
 
@@ -82,7 +85,6 @@ def run_simulations(num_games):
         results[winner] += 1
 
     return results
-
 
 #Funkcija za prikaz rezultatov
 def plot_results(results):
@@ -103,8 +105,8 @@ def main():
     choice = input("Izberi (1 ali 2): ").strip()
 
     if choice == '1':
-        player = Character(name="Player")
-        enemy = Character(name="Enemy")
+        player = Character(name="Junak")
+        enemy = Character(name="Temačni Lord")
         winner = game_turn(player, enemy, 'human')
         print(f"{winner} je zmagovalec!")
     elif choice == '2':

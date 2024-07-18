@@ -61,9 +61,10 @@ class Character:
     #Pridobimo vse možne legalne poteze
     def get_available_moves(self):
         moves = ['attack', 'guard']
-
         if self.mana >= 20:
            moves.append('super_attack')
         if self.mana >= 10:
            moves.append('heal')
         return moves
+
+
