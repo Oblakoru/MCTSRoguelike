@@ -5,7 +5,7 @@ import random
 
 class MCTS:
 
-    def __init__(self, exploration_weight=1.6):
+    def __init__(self, exploration_weight=2):
         # Nastavimo težo za exploracijo, 0=ni exploracije, le exploitacija
         self.exploration_weight = exploration_weight
 
@@ -13,15 +13,15 @@ class MCTS:
 
         #Nastavimo najboljšega otroka na None in najboljši rezultat na -inf
         best_score = -float('inf')
-        best_child = None
+        best_child = []
 
         #Gremo skozi vse otroke in izračunamo UCT vrednost
         for child in node.children:
 
-            if child.state.current_player == 1:
-                current_player = -1
-            else:
-                current_player = 1
+            # if child.state.current_player == 1:
+            #    current_player = 1
+            # else:
+            #    current_player = -1
 
             #Če otrok še ni bil obiskan, nastavimo rezultat na neskončno, da ga bomo izbrali
             if child.visits == 0:
@@ -31,11 +31,13 @@ class MCTS:
                 #Wins - vrednost zmag otroka (zmage, porazi in neodločeno)
                 exploit = child.wins / child.visits
                 explore = math.sqrt(math.log(node.visits) / child.visits)
-                score = (exploit + self.exploration_weight * explore) * current_player
+                score = (exploit + self.exploration_weight * explore)
             if score > best_score:
                 best_score = score
-                best_child = child
-        return best_child
+                best_child = [child]
+            elif score == best_score:
+                best_child.append(child)
+        return random.choice(best_child)
 
     def expand(self, node, game):
 
@@ -76,13 +78,16 @@ class MCTS:
             node = node.parent
 
     def best_move(self, root, game):
-        for _ in range(200):  # Nastavimo število iteracij
+        for _ in range(1000):  # Nastavimo število iteracij
             node = root
             game_copy = TicTacToe()
             # Kopiramo trenutno stanje igre
             game_copy.board = game.board[:]
 
             game_copy.current_player = game.current_player
+
+            # if not game_copy.game_over():
+            #     if len(node.children) == len(game.get_legal_moves()):
 
             #Se preskoči, če root nima otrok - gre direktno v razširitev
             # Selekcija - izbiramo dokler ne pridemo do končnega stanja igre
