@@ -9,35 +9,45 @@ class MCTS:
         # Nastavimo težo za exploracijo, 0=ni exploracije, le exploitacija
         self.exploration_weight = exploration_weight
 
-    def select(self, node):
-        #Nastavimo najboljšega otroka na None in najboljši rezultat na -inf
-        best_score = -float('inf')
-        best_child = None
+    def get_best_move(self, node):
 
-        #Gremo skozi vse otroke in izračunamo UCT vrednost
+        # Nastavimo najboljšega otroka na None in najboljši rezultat na -inf
+        best_score = -float('inf')
+        best_child = []
+
+        # Gremo skozi vse otroke in izračunamo UCT vrednost
         for child in node.children:
-            #Če otrok še ni bil obiskan, nastavimo rezultat na neskončno, da ga bomo izbrali
+            # Če otrok še ni bil obiskan, nastavimo rezultat na neskončno, da ga bomo izbrali
             if child.visits == 0:
                 score = float('inf')
             else:
                 # UCT formula za izračun vrednosti
-                #Wins - vrednost zmag otroka (zmage, porazi in neodločeno)
+                # Wins - vrednost zmag otroka (zmage, porazi in neodločeno)
                 exploit = child.wins / child.visits
                 explore = math.sqrt(math.log(node.visits) / child.visits)
                 score = exploit + self.exploration_weight * explore
             if score > best_score:
                 best_score = score
-                best_child = child
-        return best_child
+                best_child = [child]
+            elif score == best_score:
+                best_child.append(child)
 
-    def expand(self, node, game):
+        return random.choice(best_child)
+
+    def select(self, node):
+
+        return self.get_best_move(node)
+
+
+
+    def expand(self, node):
 
         # Preverimo, če so vsi otroci že razširjeni
-        if len(node.children) == len(game.get_legal_moves()):
+        if len(node.children) == len(node.state.get_legal_moves()):
             return  #Vrnemo, če so vsi otroci že razširjeni
 
         #Gremo skozi vse možne poteze in dodamo otroka, če še ni dodan
-        for move in game.get_legal_moves():
+        for move in node.state.get_legal_moves():
             if move not in [child.move for child in node.children]:
                 new_state = TicTacToe()
                 new_state.board = node.state.board[:]
@@ -51,6 +61,7 @@ class MCTS:
         while not game.game_over():
             move = random.choice(game.get_legal_moves())
             game.make_move(move)
+
         if game.is_winner(1):
             return -2
         elif game.is_winner(2):
@@ -63,7 +74,6 @@ class MCTS:
     def backpropagate(self, node, result):
         while node is not None:
             node.update(result)
-
             # Neke implementacije, so za vsak drugi nivo, obrnile rezultat
             #result = -result
             node = node.parent
@@ -85,7 +95,7 @@ class MCTS:
 
             # Razširitev
             if not game_copy.game_over():
-                self.expand(node, game_copy)
+                self.expand(node)
 
             # Simulacija
             if node.children:

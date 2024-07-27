@@ -1,6 +1,5 @@
 import math
 import random
-
 from TurnBasedRogueLike.Node import Node
 
 
@@ -13,19 +12,21 @@ class MCTS:
 
     def select(self, node):
         best_score = -float('inf')
-        best_child = None
+        best_child = []
 
         for child in node.children:
             if child.visits == 0:
                 score = float('inf')
             else:
-                exploit = child.wins / child.visits
+                exploit = child.score / child.visits
                 explore = math.sqrt(math.log(node.visits) / child.visits)
                 score = exploit + self.exploration_weight * explore
             if score > best_score:
                 best_score = score
-                best_child = child
-        return best_child
+                best_child = [child]
+            elif score == best_score:
+                best_child.append(child)
+        return random.choice(best_child)
 
     def expand(self, node, game):
         if len(node.children) == len(game.get_legal_moves()):

@@ -32,10 +32,9 @@ def play_game(opponent):
             game.make_move(move)
         else:  # MCTS AI (0)
             #Ustvarimo novo instanco vozlišča, podamo trenutno stanje igre
-            #root = Node(board=game)
+            root = Node(state=game)
             #Izberemo najboljšo potezo
-            #move = mcts.vrniPotezo(root, game)
-            move = mcts.vrniPotezo(game)
+            move = mcts.best_move(root, game)
             print(f"MCTS AI (O) je naredil potezo na: {move}")
             game.make_move(move)
         print(game.board[0:3])
@@ -74,6 +73,7 @@ def plot_results(results):
     plt.title('Rezultati iger: Random AI vs MCTS AI (50 iteracij)')
     plt.show()
 
+
 if __name__ == "__main__":
     print("Izberi način igranja:")
     print("1: Človek")
@@ -92,3 +92,46 @@ if __name__ == "__main__":
 
 
 
+#Ostanek od prejšnjega poskusa
+# def simulate_games(num_games, opponent, exploration_weight):
+#     results = {"X": 0, "O": 0, "D": 0}
+#
+#     for _ in range(num_games):
+#         result = play_game(opponent, exploration_weight)
+#         results[result] += 1
+#
+#     return results
+#
+# def plot_results(results, exploration_weights):
+#     labels = list(results[0].keys())
+#     for label in labels:
+#         counts = [result[label] for result in results]
+#         plt.scatter(exploration_weights, counts, label=label)
+#
+#     plt.xlabel('Exploration Weight')
+#     plt.ylabel('Count')
+#     plt.title('Results of Tic-Tac-Toe Games: Random AI vs MCTS AI with varying Exploration Weights')
+#     plt.legend()
+#     plt.show()
+#
+#
+# if __name__ == "__main__":
+#     print("Choose your opponent:")
+#     print("1: Human")
+#     print("2: Random AI")
+#     opponent = int(input("Enter 1 or 2: "))
+#
+#     if opponent == 2:
+#         num_games = 10
+#         exploration_weights = [round(x * 0.2, 1) for x in range(11)]  # 0 to 2 with increment of 0.2
+#         all_results = []
+#
+#         for weight in exploration_weights:
+#             print(f"Simularanje iger s težo exploracije: {weight}")
+#             results = simulate_games(num_games, opponent, weight)
+#             print(f"Rezultati simulacij s težo exploracije {weight}: {results}")
+#             all_results.append(results)
+#
+#         plot_results(all_results, exploration_weights)
+#     else:
+#         play_game(opponent, exploration_weight=1.4)  # Default exploration weight for human play

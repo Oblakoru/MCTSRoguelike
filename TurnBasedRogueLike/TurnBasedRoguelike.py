@@ -24,7 +24,7 @@ def random_turn(player, enemy):
 def mcts_turn(player, enemy, mcts, current_turn):
     root_state = GameState(player, enemy, current_turn)
     root_node = Node(state=root_state)
-    best_move = mcts.best_move(root_node, root_state)
+    best_move = mcts.vrniPotezo(root_node, root_state)
     root_state.apply_move(best_move)
     return best_move
 
