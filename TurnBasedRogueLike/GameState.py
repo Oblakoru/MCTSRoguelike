@@ -43,9 +43,9 @@ class GameState:
     #Preverimo, kdo je zmagal in vrnemo rezultat
     def get_result(self):
         if self.player.is_alive():
-            return 1
-        elif self.enemy.is_alive():
             return -1
+        elif self.enemy.is_alive():
+            return 1
         return 0
 
     #Kopiramo trenutno stanje igre

@@ -1,16 +1,8 @@
 class Node:
     def __init__(self, move=None, parent=None, state=None):
-        self.move = move
+        self.move = move # Poteza, ki je privedla do tega vozlišča
         self.parent = parent
-        self.state = state
-
-        if self.state.game_over():
-            self.is_terminal = True
-        else:
-            self.is_terminal = False
-
-        self.is_fully_expanded = self.is_terminal
-
+        self.state = state # Stanje igre
         self.wins = 0
         self.visits = 0
         self.children = []

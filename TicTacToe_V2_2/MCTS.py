@@ -9,7 +9,18 @@ class MCTS:
         # Nastavimo težo za exploracijo, 0=ni exploracije, le exploitacija
         self.exploration_weight = exploration_weight
 
-    def get_best_move(self, node):
+    def select(self, node):
+
+        #Se preskoči, če root nima otrok - gre direktno v razširitev
+        # Se zgodi v best_move funkciji, tuki ni potrebno
+        # while not node.is_terminal:
+        #     if node.is_fully_expanded:
+        #         node = self.get_best_move(node)
+        #     else:
+        #         return self.expand(node)
+
+        # return node
+
 
         # Nastavimo najboljšega otroka na None in najboljši rezultat na -inf
         best_score = -float('inf')
@@ -34,26 +45,12 @@ class MCTS:
 
         return random.choice(best_child)
 
-    def select(self, node):
-
-        #Se preskoči, če root nima otrok - gre direktno v razširitev
-        # Se zgodi v best_move funkciji, tuki ni potrebno
-        # while not node.is_terminal:
-        #     if node.is_fully_expanded:
-        #         node = self.get_best_move(node)
-        #     else:
-        #         return self.expand(node)
-
-        # return node
-
-        return self.get_best_move(node)
-
 
     def expand(self, node):
 
         # Preverimo, če so vsi otroci že razširjeni
         if len(node.children) == len(node.state.get_legal_moves()):
-            return  #Vrnemo, če so vsi otroci že razširjeni
+            node.is_fully_expanded = True
 
         #Gremo skozi vse možne poteze in dodamo otroka, če še ni dodan
         for move in node.state.get_legal_moves():
@@ -92,16 +89,20 @@ class MCTS:
             #result = -result
             node = node.parent
 
-    def best_move(self, root, game):
+    def best_move(self, root):
         for _ in range(100):  # Nastavimo število iteracij
 
+            #Izberemo začečno vozlišče
             node = root
+
+            #Kopiramo trenutno stanje igre, da ne spreminjamo originalnega stanja
             game_copy = TicTacToe()
-            game_copy.board = game.board[:]
-            game_copy.current_player = game.current_player
+            game_copy.board = root.state.board[:]
+            game_copy.current_player = root.state.current_player
 
             #Se preskoči, če root nima otrok - gre direktno v razširitev
             # Selekcija - izbiramo dokler ne pridemo do končnega stanja igre
+
             while node.children and not game_copy.game_over():
                 node = self.select(node)
                 game_copy.make_move(node.move)
@@ -122,7 +123,7 @@ class MCTS:
             self.backpropagate(node, result)
 
         #Izberemo najboljšega otroka - neke implementacije so vzele UCT nekatere pa najbolj obiskanega otroka
-        best_child = max(root.children, key=lambda c: c.visits)
+        best_child = max(root.children, key=lambda c: c.wins)
         return best_child.move
 
 

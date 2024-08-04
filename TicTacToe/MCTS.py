@@ -71,10 +71,10 @@ class MCTS:
     def best_move(self, root, game):
         for _ in range(100):  # Nastavimo število iteracij
             node = root
+
             game_copy = TicTacToe()
             # Kopiramo trenutno stanje igre
             game_copy.board = game.board[:]
-
             game_copy.current_player = game.current_player
 
             #Se preskoči, če root nima otrok - gre direktno v razširitev

@@ -6,6 +6,8 @@
       <excludeFolder url="file://$MODULE_DIR$/TicTacToeSlo" />
       <excludeFolder url="file://$MODULE_DIR$/old" />
       <excludeFolder url="file://$MODULE_DIR$/TicTacToe_Test" />
+      <excludeFolder url="file://$MODULE_DIR$/TicTacToe_V2_2" />
+      <excludeFolder url="file://$MODULE_DIR$/TicTacToe_V3" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

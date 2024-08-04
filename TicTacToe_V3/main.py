@@ -31,12 +31,19 @@ def play_game(opponent):
             #Naredimo potezo
             game.make_move(move)
         else:  # MCTS AI (0)
+
+            game_copy = TicTacToe()
+            game_copy.board = game.board[:]
+            game_copy.current_player = game.current_player
+
             #Ustvarimo novo instanco vozlišča, podamo trenutno stanje igre
-            root = Node(state=game)
-            #Izberemo najboljšo potezo
-            move = mcts.best_move(root, game)
+            root = Node(state=game_copy)
+
+            #Izberemo najboljšo potezo in naredimo potezo
+            move = mcts.best_move(root)
             print(f"MCTS AI (O) je naredil potezo na: {move}")
             game.make_move(move)
+
         print(game.board[0:3])
         print(game.board[3:6])
         print(game.board[6:9])

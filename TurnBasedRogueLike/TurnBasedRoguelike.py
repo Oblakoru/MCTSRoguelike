@@ -28,7 +28,6 @@ def mcts_turn(player, enemy, mcts, current_turn):
     root_state.apply_move(best_move)
     return best_move
 
-
 #Funkcija, ki omogoča igralcu, da izbere svojo potezo
 def player_turn(player, enemy):
     print("--------------------------------------")
@@ -71,7 +70,6 @@ def game_turn(player, enemy, player_type):
         return 'Igralec/Random AI'
     else:
         return 'MCTS'
-
 
 
 #Funkcija, ki zažene simulacije 100 iger proti Random AI agentu in MCTS agentu - za prikaz rezultatov na grafu
