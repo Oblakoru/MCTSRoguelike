@@ -12,7 +12,7 @@ class MCTS:
     def select(self, node):
         #Nastavimo najboljšega otroka na None in najboljši rezultat na -inf
         best_score = -float('inf')
-        best_child = None
+        best_child = []
 
         #Gremo skozi vse otroke in izračunamo UCT vrednost
         for child in node.children:
@@ -27,8 +27,10 @@ class MCTS:
                 score = exploit + self.exploration_weight * explore
             if score > best_score:
                 best_score = score
-                best_child = child
-        return best_child
+                best_child = [child]
+            elif score == best_score:
+                best_child.append(child)
+        return random.choice(best_child)
 
     def expand(self, node, game):
 
@@ -88,9 +90,6 @@ class MCTS:
                 self.expand(node, game_copy)
 
             # Simulacija
-            if node.children:
-                node = random.choice(node.children)
-                game_copy.make_move(node.move)
             result = self.simulate(game_copy)
 
             # Vzratna-posodobitev
@@ -101,3 +100,7 @@ class MCTS:
         return best_child.move
 
 
+
+     #if node.children:
+            #    node = random.choice(node.children)
+            #    game_copy.make_move(node.move)

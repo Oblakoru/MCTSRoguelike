@@ -62,22 +62,22 @@ class MCTS:
             game_copy = game.copy()
 
             #Izbiramo vozlišča, dokler ne pridemo do koncai igre ali pa list drevesa
-            #Node nastavi na neobiskanega otroka ali pa na vozlišče z največjo UCT vrednostjo
             while node.children and not game_copy.is_game_over():
+
                 node = self.select(node)
                 game_copy.apply_move(node.move)
 
             #Se v kodi zgodi le, če še ni vozlišče dokončno razširjeno - se zgodi le 1x na vozlišče
-            #Dodam VSE možne poteze na vozlišče naenkrat - če je vozlišče že razširjeno, se ne zgodi nič
             if not game_copy.is_game_over():
                 self.expand(node, game_copy)
 
+            ### Še treba preverit
+            if node.children:
+                node = random.choice(node.children)
+                game_copy.apply_move(node.move)
             result = self.simulate(game_copy)
 
             self.backpropagate(node, result)
 
         best_child = max(root.children, key=lambda c: c.visits)
         return best_child.move
-
-
-
