@@ -27,9 +27,8 @@ class MCTS:
                 best_child.append(child)
         return random.choice(best_child)
 
-
-
-
+    # Se preskoči, če root nima otrok - gre direktno v razširitev
+    # Selekcija - izbiramo dokler ne pridemo do končnega stanja igre
     def expand(self, node, game):
         if len(node.children) == len(game.get_legal_moves()):
             return
